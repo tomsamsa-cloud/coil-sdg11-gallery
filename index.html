@@ -1,195 +1,771 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="An editable student website about SDG 11: Sustainable Cities and Communities.">
-  <title>[WEBSITE TITLE] | SDG 11</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[EDIT: Site Title - SDG 11 Sustainable Cities]</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sdg: {
+                            orange: '#FD9D24',
+                            amber: '#E5243B',
+                            teal: '#00A292',
+                            dark: '#1E293B',
+                            bgLight: '#F8FAFC'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .page-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .page-section.active {
+            display: block;
+            opacity: 1;
+        }
+        .matching-item {
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        .matching-item.selected {
+            border-color: #FD9D24;
+            background-color: #FEF3C7;
+            transform: scale(1.02);
+        }
+        .matching-item.matched {
+            border-color: #10B981;
+            background-color: #D1FAE5;
+            cursor: default;
+            opacity: 0.85;
+        }
+    </style>
 </head>
-<body>
-  <header class="site-header">
-    <a class="brand" href="#home" aria-label="Go to homepage">
-      <span class="brand-mark">11</span>
-      <span>[WEBSITE TITLE]</span>
-    </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
-      <a href="#home">Home</a>
-      <a href="#problem">The Problem</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#actions">Our Actions</a>
-      <a href="#team">Our Team</a>
-    </nav>
-  </header>
+<body class="bg-sdg-bgLight text-slate-800 font-sans flex flex-col min-h-screen">
 
-  <main>
-    <section class="hero" id="home">
-      <div class="hero-image" role="img" aria-label="Placeholder background image of a city"></div>
-      <div class="hero-content">
-        <p class="eyebrow">SUSTAINABLE DEVELOPMENT GOAL 11</p>
-        <h1>[YOUR MAIN HEADLINE GOES HERE]</h1>
-        <p class="hero-lead">[Add a short welcome message about sustainable cities and communities.]</p>
-        <a class="button button-light" href="#problem">Explore the topic <span aria-hidden="true">→</span></a>
-      </div>
-      <div class="hero-number" aria-hidden="true">11</div>
-    </section>
+    <!-- HEADER & NAVIGATION -->
+    <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('welcome')">
+                    <div class="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center text-white text-xl font-bold shadow-md shadow-amber-500/20">
+                        11
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-amber-400 to-amber-200 bg-clip-text text-transparent">
+                            [EDIT: SDG 11 Hub]
+                        </span>
+                        <p class="text-xs text-slate-400 font-medium hidden sm:block">[EDIT: Sustainable Cities & Communities]</p>
+                    </div>
+                </div>
 
-    <section class="intro section-wrap">
-      <div class="section-label">01 / WELCOME</div>
-      <div class="intro-grid">
-        <div>
-          <p class="eyebrow accent">THE GOAL</p>
-          <h2>[SDG 11 GOAL TITLE]</h2>
-        </div>
-        <div>
-          <p class="large-copy">[Write a short explanation of SDG 11 and why making cities inclusive, safe, resilient, and sustainable matters.]</p>
-          <a class="text-link" href="https://sdgs.un.org/goals/goal11" target="_blank" rel="noopener noreferrer">Read about Goal 11 on the UN website ↗</a>
-        </div>
-      </div>
-    </section>
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="navigateTo('welcome')" id="nav-welcome" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 text-amber-400 bg-slate-800">
+                        [EDIT: Welcome]
+                    </button>
+                    <button onclick="navigateTo('problem')" id="nav-problem" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 text-slate-300 hover:text-white hover:bg-slate-800">
+                        [EDIT: The Problem]
+                    </button>
+                    <button onclick="navigateTo('gallery')" id="nav-gallery" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 text-slate-300 hover:text-white hover:bg-slate-800">
+                        [EDIT: Gallery]
+                    </button>
+                    <button onclick="navigateTo('actions')" id="nav-actions" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 text-slate-300 hover:text-white hover:bg-slate-800">
+                        [EDIT: Our Actions]
+                    </button>
+                    <button onclick="navigateTo('team')" id="nav-team" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 text-slate-300 hover:text-white hover:bg-slate-800">
+                        [EDIT: Our Team]
+                    </button>
+                </nav>
 
-    <section class="who-section">
-      <div class="who-image placeholder-image" role="img" aria-label="Placeholder image for your group or city">
-        <span>[ADD A PHOTO HERE]</span>
-      </div>
-      <div class="who-copy">
-        <p class="eyebrow">WHO ARE WE?</p>
-        <h2>[INTRODUCE YOUR TEAM OR PROJECT]</h2>
-        <p>[Write who you are, what your project is about, and why you chose this topic.]</p>
-        <a class="button button-dark" href="#team">Meet the team <span aria-hidden="true">→</span></a>
-      </div>
-    </section>
-
-    <section class="problem-section section-wrap" id="problem">
-      <div class="section-label">02 / UNDERSTANDING THE ISSUE</div>
-      <div class="section-heading">
-        <p class="eyebrow accent">THE PROBLEM</p>
-        <h2>[WHAT CHALLENGES DO CITIES FACE?]</h2>
-        <p class="section-description">[Add a short introduction to the issues your project explores.]</p>
-      </div>
-      <div class="problem-cards">
-        <article class="problem-card">
-          <span class="card-number">01</span>
-          <h3>[PROBLEM ONE]</h3>
-          <p>[Describe the first problem here.]</p>
-        </article>
-        <article class="problem-card">
-          <span class="card-number">02</span>
-          <h3>[PROBLEM TWO]</h3>
-          <p>[Describe the second problem here.]</p>
-        </article>
-        <article class="problem-card">
-          <span class="card-number">03</span>
-          <h3>[PROBLEM THREE]</h3>
-          <p>[Describe the third problem here.]</p>
-        </article>
-      </div>
-      <a class="button button-dark" href="https://sdgs.un.org/goals/goal11" target="_blank" rel="noopener noreferrer">Official SDG 11 information ↗</a>
-    </section>
-
-    <section class="gallery-section" id="gallery">
-      <div class="section-wrap">
-        <div class="section-label">03 / IN PICTURES</div>
-        <div class="gallery-heading">
-          <div>
-            <p class="eyebrow">GALLERY</p>
-            <h2>[YOUR PHOTO GALLERY TITLE]</h2>
-          </div>
-          <p>[Add a sentence introducing the photos and what they show.]</p>
-        </div>
-        <div class="gallery-grid">
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="01"><span>[PHOTO 01]</span></div><figcaption><strong>[PHOTO TITLE 01]</strong><span>[Description of photo 1.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="02"><span>[PHOTO 02]</span></div><figcaption><strong>[PHOTO TITLE 02]</strong><span>[Description of photo 2.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="03"><span>[PHOTO 03]</span></div><figcaption><strong>[PHOTO TITLE 03]</strong><span>[Description of photo 3.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="04"><span>[PHOTO 04]</span></div><figcaption><strong>[PHOTO TITLE 04]</strong><span>[Description of photo 4.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="05"><span>[PHOTO 05]</span></div><figcaption><strong>[PHOTO TITLE 05]</strong><span>[Description of photo 5.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="06"><span>[PHOTO 06]</span></div><figcaption><strong>[PHOTO TITLE 06]</strong><span>[Description of photo 6.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="07"><span>[PHOTO 07]</span></div><figcaption><strong>[PHOTO TITLE 07]</strong><span>[Description of photo 7.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="08"><span>[PHOTO 08]</span></div><figcaption><strong>[PHOTO TITLE 08]</strong><span>[Description of photo 8.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="09"><span>[PHOTO 09]</span></div><figcaption><strong>[PHOTO TITLE 09]</strong><span>[Description of photo 9.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="10"><span>[PHOTO 10]</span></div><figcaption><strong>[PHOTO TITLE 10]</strong><span>[Description of photo 10.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="11"><span>[PHOTO 11]</span></div><figcaption><strong>[PHOTO TITLE 11]</strong><span>[Description of photo 11.]</span></figcaption></figure>
-          <figure class="gallery-item"><div class="photo-placeholder" data-number="12"><span>[PHOTO 12]</span></div><figcaption><strong>[PHOTO TITLE 12]</strong><span>[Description of photo 12.]</span></figcaption></figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="actions-section section-wrap" id="actions">
-      <div class="section-label">04 / MAKE A CONNECTION</div>
-      <div class="section-heading">
-        <p class="eyebrow accent">OUR ACTIONS</p>
-        <h2>[MATCH EACH PROBLEM WITH A SOLUTION]</h2>
-        <p class="section-description">Choose a solution for each problem. Replace the sample placeholders in the JavaScript file to customize the activity.</p>
-      </div>
-      <div class="matching-board">
-        <div class="match-column">
-          <h3><span class="column-dot problem-dot"></span> Problems</h3>
-          <div id="problemList" class="match-list"></div>
-        </div>
-        <div class="match-column">
-          <h3><span class="column-dot solution-dot"></span> Solutions</h3>
-          <div id="solutionList" class="match-list"></div>
-        </div>
-      </div>
-      <div class="match-controls">
-        <p id="matchFeedback" class="match-feedback" aria-live="polite">[Select a solution for each problem.]</p>
-        <button class="button button-dark" id="checkMatches">Check connections</button>
-        <button class="button button-outline" id="resetMatches">Reset</button>
-      </div>
-    </section>
-
-    <section class="team-section" id="team">
-      <div class="section-wrap">
-        <div class="section-label">05 / THE PEOPLE BEHIND IT</div>
-        <div class="section-heading">
-          <p class="eyebrow">OUR TEAM</p>
-          <h2>[MEET THE STUDENTS]</h2>
-          <p class="section-description">[Add a short introduction to the students working on this project.]</p>
-        </div>
-        <div class="team-grid">
-          <article class="team-member">
-            <div class="team-top">
-              <div class="avatar-placeholder">[STUDENT 1 PHOTO]</div>
-              <div><p class="eyebrow accent">STUDENT 01</p><h3>[STUDENT ONE NAME]</h3><p>[Write a short description about student one, their interests, and their role in the project.]</p></div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
             </div>
-            <div class="video-placeholder">
-              <video controls preload="metadata" poster="" aria-label="Video introduction by student one">
-                <source src="videos/student-1.mp4" type="video/mp4">
-                Your browser does not support the video element.
-              </video>
-              <p>[Add student one's video as <code>videos/student-1.mp4</code>.]</p>
-            </div>
-          </article>
-          <article class="team-member">
-            <div class="team-top">
-              <div class="avatar-placeholder">[STUDENT 2 PHOTO]</div>
-              <div><p class="eyebrow accent">STUDENT 02</p><h3>[STUDENT TWO NAME]</h3><p>[Write a short description about student two, their interests, and their role in the project.]</p></div>
-            </div>
-            <div class="video-placeholder">
-              <video controls preload="metadata" poster="" aria-label="Video introduction by student two">
-                <source src="videos/student-2.mp4" type="video/mp4">
-                Your browser does not support the video element.
-              </video>
-              <p>[Add student two's video as <code>videos/student-2.mp4</code>.]</p>
-            </div>
-          </article>
         </div>
-      </div>
-    </section>
-  </main>
 
-  <footer class="site-footer">
-    <div class="footer-top">
-      <a class="brand footer-brand" href="#home"><span class="brand-mark">11</span><span>[WEBSITE TITLE]</span></a>
-      <p>[Add a short closing message or project tagline.]</p>
-    </div>
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <a href="#home">Home</a><a href="#problem">The Problem</a><a href="#gallery">Gallery</a><a href="#actions">Our Actions</a><a href="#team">Our Team</a>
-    </nav>
-    <div class="footer-bottom"><span>[SCHOOL / CLASS / PROJECT]</span><span>SDG 11 · Sustainable Cities and Communities</span></div>
-  </footer>
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-900 border-b border-slate-800 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="navigateTo('welcome'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-amber-400 bg-slate-800">
+                [EDIT: Welcome]
+            </button>
+            <button onclick="navigateTo('problem'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">
+                [EDIT: The Problem]
+            </button>
+            <button onclick="navigateTo('gallery'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">
+                [EDIT: Gallery]
+            </button>
+            <button onclick="navigateTo('actions'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">
+                [EDIT: Our Actions]
+            </button>
+            <button onclick="navigateTo('team'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800">
+                [EDIT: Our Team]
+            </button>
+        </div>
+    </header>
 
-  <script src="script.js"></script>
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow">
+        
+        <!-- PAGE 1: WELCOME PAGE -->
+        <section id="page-welcome" class="page-section active">
+            <!-- Hero Banner with Background Image Placeholder -->
+            <div class="relative bg-slate-900 text-white min-h-[500px] flex items-center justify-center overflow-hidden">
+                <!-- Background Image & Overlay -->
+                <img src="https://placehold.co/1920x1080/1e293b/fd9d24?text=[EDIT:+Background+Image+Placeholder]" 
+                     alt="SDG 11 Background" 
+                     class="absolute inset-0 w-full h-full object-cover opacity-30"
+                     onerror="this.src='https://placehold.co/1920x1080/1e293b/ffffff?text=Image+Load+Error'">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
+                
+                <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-amber-500/20 text-amber-300 text-sm font-semibold tracking-wide uppercase mb-4 border border-amber-500/30">
+                        [EDIT: Sustainable Development Goal 11]
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight mb-6">
+                        [EDIT: SDG 11 Goal: Make Cities Inclusive, Safe, Resilient and Sustainable]
+                    </h1>
+                    <p class="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto mb-8 font-light leading-relaxed">
+                        [EDIT: Insert a catchy subtitle or brief tagline here about your mission to transform urban living spaces into eco-friendly and safe hubs.]
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="navigateTo('problem')" class="px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold transition-all shadow-lg hover:shadow-amber-500/25">
+                            [EDIT: Discover The Problem]
+                        </button>
+                        <button onclick="navigateTo('actions')" class="px-8 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold border border-slate-700 transition-all">
+                            [EDIT: Explore Solutions]
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- "Who Are We" Section -->
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-slate-200">
+                    <div class="max-w-3xl mx-auto text-center">
+                        <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
+                            <i class="fas fa-users-viewfinder"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">[EDIT: Who Are We]</h2>
+                        <div class="h-1 w-20 bg-amber-500 mx-auto rounded-full mb-6"></div>
+                        <p class="text-slate-600 text-lg leading-relaxed mb-6">
+                            [EDIT: Insert text introducing your group or organization here. Explain your background, your purpose for creating this platform, and how you aim to contribute toward sustainable urbanization.]
+                        </p>
+                        <p class="text-slate-500 text-base leading-relaxed">
+                            [EDIT: Additional details about your mission, school project details, passion for environmental architecture, or community outreach efforts can be added here.]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: THE PROBLEM -->
+        <section id="page-problem" class="page-section">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+                
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="text-amber-600 font-bold tracking-wider uppercase text-sm">[EDIT: Challenges in Urbanization]</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">[EDIT: The Problem Header]</h2>
+                    <p class="text-slate-600 text-lg">[EDIT: Short introductory summary describing why sustainable urban design is urgent today.]</p>
+                </div>
+
+                <!-- Problem Content Blocks -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mb-6 text-xl font-bold">
+                            01
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">[EDIT: Problem Detail Header 1 - Rapid Slum Expansion]</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            [EDIT: Paragraph detailing specific urban issues such as overcrowding, inadequate housing conditions, poor sanitation, and lack of basic services for vulnerable populations.]
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mb-6 text-xl font-bold">
+                            02
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">[EDIT: Problem Detail Header 2 - Environmental Impact & Waste]</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            [EDIT: Paragraph describing municipal waste mismanagement, heavy air and noise pollution, high carbon footprints, and lack of green public space in urban spaces.]
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Detailed Text Box -->
+                <div class="bg-slate-900 text-white rounded-3xl p-8 sm:p-10 mb-12 shadow-xl">
+                    <h3 class="text-2xl font-bold mb-4 text-amber-400">[EDIT: Comprehensive Analysis of Urban Pressures]</h3>
+                    <p class="text-slate-300 leading-relaxed mb-4">
+                        [EDIT: Longer description paragraph explaining systemic problems, climate vulnerabilities, transportation blockages, and unequal access to public transport systems.]
+                    </p>
+                    <p class="text-slate-300 leading-relaxed">
+                        [EDIT: Further detail on how uncontrolled sprawl harms ecosystems, strains municipal infrastructure, and degrades overall quality of life.]
+                    </p>
+                </div>
+
+                <!-- Link to Official SDG Problem Page -->
+                <div class="text-center bg-amber-50 rounded-2xl p-8 border border-amber-200">
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">[EDIT: Want to learn more from official sources?]</h3>
+                    <p class="text-slate-600 mb-6">[EDIT: Explore detailed global statistics and official UN progress reports on Goal 11.]</p>
+                    <a href="https://sdgs.un.org/goals/goal11" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold transition-all shadow-md">
+                        <i class="fas fa-external-link-alt mr-2"></i>
+                        [EDIT: Official UN SDG 11 Problem Page]
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PAGE 3: GALLERY -->
+        <section id="page-gallery" class="page-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+                
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="text-amber-600 font-bold tracking-wider uppercase text-sm">[EDIT: Visual Collection]</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">[EDIT: Sustainable City Gallery]</h2>
+                    <p class="text-slate-600 text-lg">[EDIT: Explore 12 photos highlighting sustainable urban innovations, challenges, and architectural projects.]</p>
+                </div>
+
+                <!-- 12 Photo Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    
+                    <!-- Photo Card 1 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/00a292/ffffff?text=[EDIT:+Photo+1]" alt="Gallery 1" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+1'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 1 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 1 detailing sustainable urban housing or green space.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 2 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/fd9d24/ffffff?text=[EDIT:+Photo+2]" alt="Gallery 2" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+2'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 2 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 2 highlighting green public transportation networks.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 3 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/1e293b/ffffff?text=[EDIT:+Photo+3]" alt="Gallery 3" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+3'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 3 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 3 displaying rooftop solar energy and vertical gardens.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 4 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/e5243b/ffffff?text=[EDIT:+Photo+4]" alt="Gallery 4" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+4'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 4 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 4 depicting urban waste management initiatives.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 5 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/00a292/ffffff?text=[EDIT:+Photo+5]" alt="Gallery 5" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+5'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 5 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 5 showing pedestrianized walkways and cycling lanes.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 6 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/fd9d24/ffffff?text=[EDIT:+Photo+6]" alt="Gallery 6" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+6'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 6 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 6 highlighting cultural heritage preservation efforts.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 7 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/1e293b/ffffff?text=[EDIT:+Photo+7]" alt="Gallery 7" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+7'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 7 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 7 focusing on disaster-resilient infrastructure design.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 8 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/e5243b/ffffff?text=[EDIT:+Photo+8]" alt="Gallery 8" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+8'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 8 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 8 showing inclusive public parks and community areas.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 9 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/00a292/ffffff?text=[EDIT:+Photo+9]" alt="Gallery 9" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+9'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 9 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 9 displaying urban agricultural roof gardens.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 10 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/fd9d24/ffffff?text=[EDIT:+Photo+10]" alt="Gallery 10" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+10'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 10 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 10 illustrating smart energy grid systems.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 11 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/1e293b/ffffff?text=[EDIT:+Photo+11]" alt="Gallery 11" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+11'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 11 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 11 highlighting clean electric mobility solutions.]</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo Card 12 -->
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col">
+                        <div class="h-48 bg-slate-200 relative overflow-hidden">
+                            <img src="https://placehold.co/600x400/e5243b/ffffff?text=[EDIT:+Photo+12]" alt="Gallery 12" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/1e293b/ffffff?text=Image+12'">
+                        </div>
+                        <div class="p-5 flex-grow">
+                            <h4 class="font-bold text-slate-900 mb-1">[EDIT: Photo 12 Title]</h4>
+                            <p class="text-xs text-slate-500">[EDIT: Description of Photo 12 showcasing sustainable municipal water recycling.]</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: OUR ACTIONS (INTERACTIVE MATCHING TOOL) -->
+        <section id="page-actions" class="page-section">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+                
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <span class="text-amber-600 font-bold tracking-wider uppercase text-sm">[EDIT: Connect Solutions]</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">[EDIT: Our Actions - Connect Problems to Solutions]</h2>
+                    <p class="text-slate-600 text-lg">
+                        [EDIT: Click a problem on the left, then click its corresponding solution on the right to match them up!]
+                    </p>
+                </div>
+
+                <!-- Interactive Game Container -->
+                <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-md">
+                    
+                    <!-- Game Status Banner -->
+                    <div id="game-status" class="mb-8 p-4 rounded-xl bg-amber-50 border border-amber-200 text-center text-slate-800 font-medium">
+                        <i class="fas fa-hand-pointer text-amber-500 mr-2"></i>
+                        <span>Select a problem on the left to start matching.</span>
+                    </div>
+
+                    <!-- Matching Columns -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        
+                        <!-- Problems Side -->
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center">
+                                <i class="fas fa-exclamation-triangle text-amber-500 mr-2"></i>
+                                [EDIT: Urban Problems]
+                            </h3>
+                            <div class="space-y-4" id="problems-list">
+                                <div data-id="1" onclick="selectProblem(this)" class="matching-item p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">[EDIT: Problem 1 - High air pollution from fossil fuel cars]</span>
+                                    <i class="fas fa-circle text-xs text-slate-300 status-icon"></i>
+                                </div>
+                                <div data-id="2" onclick="selectProblem(this)" class="matching-item p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">[EDIT: Problem 2 - Slums and unsanitary informal housing]</span>
+                                    <i class="fas fa-circle text-xs text-slate-300 status-icon"></i>
+                                </div>
+                                <div data-id="3" onclick="selectProblem(this)" class="matching-item p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">[EDIT: Problem 3 - Overflows of unmanaged municipal waste]</span>
+                                    <i class="fas fa-circle text-xs text-slate-300 status-icon"></i>
+                                </div>
+                                <div data-id="4" onclick="selectProblem(this)" class="matching-item p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">[EDIT: Problem 4 - Extreme vulnerability to natural disasters]</span>
+                                    <i class="fas fa-circle text-xs text-slate-300 status-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solutions Side -->
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center">
+                                <i class="fas fa-lightbulb text-emerald-500 mr-2"></i>
+                                [EDIT: Sustainable Solutions]
+                            </h3>
+                            <div class="space-y-4" id="solutions-list">
+                                <div data-id="3" onclick="selectSolution(this)" class="matching-item p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">[EDIT: Solution C - Community recycling and composting programs]</span>
+                                    <i class="fas fa-circle text-xs text-slate-300 status-icon"></i>
+                                </div>
+                                <div data-id="1" onclick="selectSolution(this)" class="matching-item p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">[EDIT: Solution A - Expand electric public transport & bike paths]</span>
+                                    <i class="fas fa-circle text-xs text-slate-300 status-icon"></i>
+                                </div>
+                                <div data-id="4" onclick="selectSolution(this)" class="matching-item p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">[EDIT: Solution D - Build climate-resilient early warning urban infrastructure]</span>
+                                    <i class="fas fa-circle text-xs text-slate-300 status-icon"></i>
+                                </div>
+                                <div data-id="2" onclick="selectSolution(this)" class="matching-item p-4 rounded-xl border-2 border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between">
+                                    <span class="font-medium text-slate-800">[EDIT: Solution B - Subsidized affordable eco-housing projects]</span>
+                                    <i class="fas fa-circle text-xs text-slate-300 status-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Reset Button -->
+                    <div class="mt-8 text-center">
+                        <button onclick="resetGame()" class="px-6 py-2.5 rounded-xl border border-slate-300 text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium text-sm transition-all">
+                            <i class="fas fa-redo mr-2"></i>Reset Game
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: OUR TEAM -->
+        <section id="page-team" class="page-section">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+                
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="text-amber-600 font-bold tracking-wider uppercase text-sm">[EDIT: Project Creators]</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">[EDIT: Meet Our Team]</h2>
+                    <p class="text-slate-600 text-lg">[EDIT: Learn more about the students behind this project and watch their video presentations.]</p>
+                </div>
+
+                <!-- Side-by-Side Team Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- Student 1 Column -->
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-md flex flex-col justify-between">
+                        <div>
+                            <!-- Header with Name -->
+                            <div class="flex items-center space-x-4 mb-6">
+                                <div class="w-16 h-16 rounded-2xl bg-amber-500 text-slate-950 font-black text-2xl flex items-center justify-center shadow-md">
+                                    S1
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-slate-900">[EDIT: Student 1 Name]</h3>
+                                    <p class="text-amber-600 font-medium text-sm">[EDIT: Role / Title - e.g., Urban Planning Researcher]</p>
+                                </div>
+                            </div>
+
+                            <!-- Short Description -->
+                            <div class="mb-6">
+                                <p class="text-slate-600 leading-relaxed">
+                                    [EDIT: Short description about Student 1. Detail their contribution to the SDG 11 project, academic background, interests in sustainable design, and key takeaways.]
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Embedded Video Player Placeholder -->
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Video Presentation</h4>
+                            <div class="aspect-video bg-slate-900 rounded-2xl overflow-hidden relative shadow-inner flex items-center justify-center">
+                                <video class="w-full h-full object-cover" controls poster="https://placehold.co/800x450/1e293b/fd9d24?text=[EDIT:+Student+1+Video+Poster]">
+                                    <!-- Replace src with your actual video link if available -->
+                                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+                                    Your browser does not support HTML5 video.
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Student 2 Column -->
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-md flex flex-col justify-between">
+                        <div>
+                            <!-- Header with Name -->
+                            <div class="flex items-center space-x-4 mb-6">
+                                <div class="w-16 h-16 rounded-2xl bg-emerald-500 text-white font-black text-2xl flex items-center justify-center shadow-md">
+                                    S2
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-slate-900">[EDIT: Student 2 Name]</h3>
+                                    <p class="text-emerald-600 font-medium text-sm">[EDIT: Role / Title - e.g., Sustainability Developer]</p>
+                                </div>
+                            </div>
+
+                            <!-- Short Description -->
+                            <div class="mb-6">
+                                <p class="text-slate-600 leading-relaxed">
+                                    [EDIT: Short description about Student 2. Detail their contribution to the SDG 11 project, academic background, interests in eco-technology, and team management.]
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Embedded Video Player Placeholder -->
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Video Presentation</h4>
+                            <div class="aspect-video bg-slate-900 rounded-2xl overflow-hidden relative shadow-inner flex items-center justify-center">
+                                <video class="w-full h-full object-cover" controls poster="https://placehold.co/800x450/1e293b/00a292?text=[EDIT:+Student+2+Video+Poster]">
+                                    <!-- Replace src with your actual video link if available -->
+                                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4">
+                                    Your browser does not support HTML5 video.
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 text-white border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Footer Brand -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-slate-950 text-lg font-bold">
+                            11
+                        </div>
+                        <span class="text-lg font-bold text-white">[EDIT: SDG 11 Title]</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        [EDIT: Footer paragraph describing the goals of this web platform and promoting sustainable cities.]
+                    </p>
+                </div>
+
+                <!-- Footer Page Links -->
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-wider text-amber-400 mb-4">[EDIT: Page Navigation]</h4>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li><button onclick="navigateTo('welcome')" class="hover:text-amber-400 transition-colors">[EDIT: Welcome Page]</button></li>
+                        <li><button onclick="navigateTo('problem')" class="hover:text-amber-400 transition-colors">[EDIT: The Problem]</button></li>
+                        <li><button onclick="navigateTo('gallery')" class="hover:text-amber-400 transition-colors">[EDIT: Photo Gallery]</button></li>
+                        <li><button onclick="navigateTo('actions')" class="hover:text-amber-400 transition-colors">[EDIT: Our Actions]</button></li>
+                        <li><button onclick="navigateTo('team')" class="hover:text-amber-400 transition-colors">[EDIT: Our Team]</button></li>
+                    </ul>
+                </div>
+
+                <!-- Footer Contact & Credits -->
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-wider text-amber-400 mb-4">[EDIT: Contact & Credits]</h4>
+                    <p class="text-sm text-slate-400 mb-2">[EDIT: School/University Name]</p>
+                    <p class="text-sm text-slate-400 mb-4">[EDIT: contact@example.com]</p>
+                    <div class="flex space-x-4 text-slate-400 text-lg">
+                        <a href="#" class="hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-white transition-colors"><i class="fab fa-github"></i></a>
+                        <a href="#" class="hover:text-white transition-colors"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Copyright bar -->
+            <div class="mt-12 pt-6 border-t border-slate-900 text-center text-xs text-slate-500">
+                [EDIT: © 2026 Sustainable Cities Project. All rights reserved.]
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        // Tab Navigation Logic
+        function navigateTo(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // Update Desktop Nav styles
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('text-amber-400', 'bg-slate-800');
+                btn.classList.add('text-slate-300');
+            });
+
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-300');
+                activeBtn.classList.add('text-amber-400', 'bg-slate-800');
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Our Actions Interactive Matching Game Logic
+        let selectedProblem = null;
+        let selectedSolution = null;
+        let matchesCount = 0;
+        const totalMatches = 4;
+
+        function selectProblem(element) {
+            if (element.classList.contains('matched')) return;
+
+            // Deselect previous problem
+            document.querySelectorAll('#problems-list .matching-item').forEach(item => {
+                if (!item.classList.contains('matched')) {
+                    item.classList.remove('selected');
+                }
+            });
+
+            element.classList.add('selected');
+            selectedProblem = element;
+
+            updateStatus("Now click the matching solution on the right column.");
+            checkMatch();
+        }
+
+        function selectSolution(element) {
+            if (element.classList.contains('matched')) return;
+
+            // Deselect previous solution
+            document.querySelectorAll('#solutions-list .matching-item').forEach(item => {
+                if (!item.classList.contains('matched')) {
+                    item.classList.remove('selected');
+                }
+            });
+
+            element.classList.add('selected');
+            selectedSolution = element;
+
+            if (!selectedProblem) {
+                updateStatus("Now select a problem on the left to match!");
+            } else {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            if (selectedProblem && selectedSolution) {
+                const probId = selectedProblem.getAttribute('data-id');
+                const solId = selectedSolution.getAttribute('data-id');
+
+                if (probId === solId) {
+                    // Match found!
+                    selectedProblem.classList.remove('selected');
+                    selectedSolution.classList.remove('selected');
+
+                    selectedProblem.classList.add('matched');
+                    selectedSolution.classList.add('matched');
+
+                    // Update icons
+                    selectedProblem.querySelector('.status-icon').className = "fas fa-check-circle text-emerald-500 status-icon";
+                    selectedSolution.querySelector('.status-icon').className = "fas fa-check-circle text-emerald-500 status-icon";
+
+                    selectedProblem = null;
+                    selectedSolution = null;
+                    matchesCount++;
+
+                    if (matchesCount === totalMatches) {
+                        updateStatus("🎉 Excellent! You have successfully matched all problems with their solutions!", true);
+                    } else {
+                        updateStatus("✅ Correct match! Pick another problem.");
+                    }
+                } else {
+                    // Incorrect match
+                    updateStatus("❌ Not a match. Try pairing again!", false);
+                    setTimeout(() => {
+                        if (selectedProblem) selectedProblem.classList.remove('selected');
+                        if (selectedSolution) selectedSolution.classList.remove('selected');
+                        selectedProblem = null;
+                        selectedSolution = null;
+                    }, 1000);
+                }
+            }
+        }
+
+        function updateStatus(message, isSuccess = null) {
+            const statusBox = document.getElementById('game-status');
+            statusBox.innerHTML = message;
+            
+            if (isSuccess === true) {
+                statusBox.className = "mb-8 p-4 rounded-xl bg-emerald-100 border border-emerald-300 text-center text-emerald-900 font-bold";
+            } else if (isSuccess === false) {
+                statusBox.className = "mb-8 p-4 rounded-xl bg-rose-100 border border-rose-300 text-center text-rose-900 font-medium";
+            } else {
+                statusBox.className = "mb-8 p-4 rounded-xl bg-amber-50 border border-amber-200 text-center text-slate-800 font-medium";
+            }
+        }
+
+        function resetGame() {
+            selectedProblem = null;
+            selectedSolution = null;
+            matchesCount = 0;
+
+            const allItems = document.querySelectorAll('.matching-item');
+            allItems.forEach(item => {
+                item.classList.remove('selected', 'matched');
+                const icon = item.querySelector('.status-icon');
+                if (icon) icon.className = "fas fa-circle text-xs text-slate-300 status-icon";
+            });
+
+            updateStatus("<i class='fas fa-hand-pointer text-amber-500 mr-2'></i>Select a problem on the left to start matching.");
+        }
+    </script>
 </body>
 </html>

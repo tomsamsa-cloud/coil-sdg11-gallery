@@ -1,114 +1,145 @@
-// EDIT THESE ARRAYS to customize the interactive Problems & Solutions activity.
-const problems = [
-  { id: "p1", title: "[Problem placeholder 1]", solutionId: "s2" },
-  { id: "p2", title: "[Problem placeholder 2]", solutionId: "s1" },
-  { id: "p3", title: "[Problem placeholder 3]", solutionId: "s3" }
-];
+function navigateTo(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
 
-const solutions = [
-  { id: "s1", title: "[Solution placeholder 1]" },
-  { id: "s2", title: "[Solution placeholder 2]" },
-  { id: "s3", title: "[Solution placeholder 3]" }
-];
+            // Show selected page
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
 
-const problemList = document.getElementById("problemList");
-const solutionList = document.getElementById("solutionList");
-const feedback = document.getElementById("matchFeedback");
+            // Update Desktop Nav styles
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('text-amber-400', 'bg-slate-800');
+                btn.classList.add('text-slate-300');
+            });
 
-function renderMatchingActivity() {
-  problemList.innerHTML = "";
-  problems.forEach((problem) => {
-    const row = document.createElement("div");
-    row.className = "match-row";
-    row.dataset.problemId = problem.id;
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-300');
+                activeBtn.classList.add('text-amber-400', 'bg-slate-800');
+            }
 
-    const label = document.createElement("label");
-    label.className = "match-problem";
-    label.htmlFor = `select-${problem.id}`;
-    label.textContent = problem.title;
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-    const select = document.createElement("select");
-    select.id = `select-${problem.id}`;
-    select.setAttribute("aria-label", `Choose a solution for ${problem.title}`);
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
 
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "[Choose a solution]";
-    select.appendChild(defaultOption);
+        // Our Actions Interactive Matching Game Logic
+        let selectedProblem = null;
+        let selectedSolution = null;
+        let matchesCount = 0;
+        const totalMatches = 4;
 
-    solutions.forEach((solution) => {
-      const option = document.createElement("option");
-      option.value = solution.id;
-      option.textContent = solution.title;
-      select.appendChild(option);
-    });
+        function selectProblem(element) {
+            if (element.classList.contains('matched')) return;
 
-    select.addEventListener("change", () => {
-      row.classList.remove("correct", "incorrect");
-      feedback.textContent = "[Click “Check connections” to see your results.]";
-    });
+            // Deselect previous problem
+            document.querySelectorAll('#problems-list .matching-item').forEach(item => {
+                if (!item.classList.contains('matched')) {
+                    item.classList.remove('selected');
+                }
+            });
 
-    row.append(label, select);
-    problemList.appendChild(row);
-  });
+            element.classList.add('selected');
+            selectedProblem = element;
 
-  solutionList.innerHTML = "";
-  solutions.forEach((solution, index) => {
-    const item = document.createElement("div");
-    item.className = "match-row";
-    item.style.gridTemplateColumns = "1fr";
-    item.textContent = `${String(index + 1).padStart(2, "0")}  ${solution.title}`;
-    solutionList.appendChild(item);
-  });
-}
+            updateStatus("Now click the matching solution on the right column.");
+            checkMatch();
+        }
 
-document.getElementById("checkMatches").addEventListener("click", () => {
-  let correct = 0;
-  let answered = 0;
+        function selectSolution(element) {
+            if (element.classList.contains('matched')) return;
 
-  problems.forEach((problem) => {
-    const row = problemList.querySelector(`[data-problem-id="${problem.id}"]`);
-    const select = row.querySelector("select");
-    row.classList.remove("correct", "incorrect");
+            // Deselect previous solution
+            document.querySelectorAll('#solutions-list .matching-item').forEach(item => {
+                if (!item.classList.contains('matched')) {
+                    item.classList.remove('selected');
+                }
+            });
 
-    if (select.value) answered++;
-    if (select.value && select.value === problem.solutionId) {
-      correct++;
-      row.classList.add("correct");
-    } else {
-      row.classList.add("incorrect");
-    }
-  });
+            element.classList.add('selected');
+            selectedSolution = element;
 
-  if (answered < problems.length) {
-    feedback.textContent = `You have answered ${answered} of ${problems.length}. Finish the remaining matches and check again.`;
-  } else if (correct === problems.length) {
-    feedback.textContent = `Excellent! All ${correct} connections are correct.`;
-  } else {
-    feedback.textContent = `${correct} of ${problems.length} connections are correct. Try again!`;
-  }
-});
+            if (!selectedProblem) {
+                updateStatus("Now select a problem on the left to match!");
+            } else {
+                checkMatch();
+            }
+        }
 
-document.getElementById("resetMatches").addEventListener("click", () => {
-  renderMatchingActivity();
-  feedback.textContent = "[Select a solution for each problem.]";
-});
+        function checkMatch() {
+            if (selectedProblem && selectedSolution) {
+                const probId = selectedProblem.getAttribute('data-id');
+                const solId = selectedSolution.getAttribute('data-id');
 
-const menuToggle = document.getElementById("menuToggle");
-const mainNav = document.getElementById("mainNav");
+                if (probId === solId) {
+                    // Match found!
+                    selectedProblem.classList.remove('selected');
+                    selectedSolution.classList.remove('selected');
 
-menuToggle.addEventListener("click", () => {
-  const isOpen = mainNav.classList.toggle("open");
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
-  menuToggle.textContent = isOpen ? "×" : "☰";
-});
+                    selectedProblem.classList.add('matched');
+                    selectedSolution.classList.add('matched');
 
-mainNav.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => {
-    mainNav.classList.remove("open");
-    menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.textContent = "☰";
-  });
-});
+                    // Update icons
+                    selectedProblem.querySelector('.status-icon').className = "fas fa-check-circle text-emerald-500 status-icon";
+                    selectedSolution.querySelector('.status-icon').className = "fas fa-check-circle text-emerald-500 status-icon";
 
-renderMatchingActivity();
+                    selectedProblem = null;
+                    selectedSolution = null;
+                    matchesCount++;
+
+                    if (matchesCount === totalMatches) {
+                        updateStatus("🎉 Excellent! You have successfully matched all problems with their solutions!", true);
+                    } else {
+                        updateStatus("✅ Correct match! Pick another problem.");
+                    }
+                } else {
+                    // Incorrect match
+                    updateStatus("❌ Not a match. Try pairing again!", false);
+                    setTimeout(() => {
+                        if (selectedProblem) selectedProblem.classList.remove('selected');
+                        if (selectedSolution) selectedSolution.classList.remove('selected');
+                        selectedProblem = null;
+                        selectedSolution = null;
+                    }, 1000);
+                }
+            }
+        }
+
+        function updateStatus(message, isSuccess = null) {
+            const statusBox = document.getElementById('game-status');
+            statusBox.innerHTML = message;
+            
+            if (isSuccess === true) {
+                statusBox.className = "mb-8 p-4 rounded-xl bg-emerald-100 border border-emerald-300 text-center text-emerald-900 font-bold";
+            } else if (isSuccess === false) {
+                statusBox.className = "mb-8 p-4 rounded-xl bg-rose-100 border border-rose-300 text-center text-rose-900 font-medium";
+            } else {
+                statusBox.className = "mb-8 p-4 rounded-xl bg-amber-50 border border-amber-200 text-center text-slate-800 font-medium";
+            }
+        }
+
+        function resetGame() {
+            selectedProblem = null;
+            selectedSolution = null;
+            matchesCount = 0;
+
+            const allItems = document.querySelectorAll('.matching-item');
+            allItems.forEach(item => {
+                item.classList.remove('selected', 'matched');
+                const icon = item.querySelector('.status-icon');
+                if (icon) icon.className = "fas fa-circle text-xs text-slate-300 status-icon";
+            });
+
+            updateStatus("<i class='fas fa-hand-pointer text-amber-500 mr-2'></i>Select a problem on the left to start matching.");
+        }
