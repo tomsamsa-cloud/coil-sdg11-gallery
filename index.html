@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[EDIT: Site Title - SDG 11 Sustainable Cities]</title>
+    <meta name="theme-color" content="#130F3A">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Bricolage Grotesque (display) + Figtree (text) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Brand palette: Electric Indigo, Tropical Mint, Night Indigo
+                        indigo: {
+                            50: '#F3F0FF', 100: '#E6DFFE', 200: '#CDBEFD', 300: '#AE95FB',
+                            400: '#8C67F7', 500: '#5B2EF0', DEFAULT: '#5B2EF0',
+                            600: '#4A20D6', 700: '#3A18AA', 800: '#2A1180'
+                        },
+                        mint: {
+                            50: '#ECFEF5', 100: '#D4FCE8', 200: '#AEF8D3', 300: '#7CF3BC',
+                            DEFAULT: '#7CF3BC', 400: '#4FE6A0', 500: '#25CC85',
+                            600: '#14A86A', 700: '#0C8053', 800: '#085F3E'
+                        },
+                        night: { DEFAULT: '#130F3A', 900: '#0C0928', 800: '#1B1650', 700: '#261F66' },
+                        onyx: { DEFAULT: '#130F3A', 800: '#1B1650', 700: '#261F66' },
+                        canvas: '#F5F4FA',
+                        muted: '#57556F'
+                    },
+                    fontFamily: {
+                        sans: ['Figtree', 'system-ui', 'sans-serif'],
+                        display: ['"Bricolage Grotesque"', 'Figtree', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --night: #130F3A;
+            --night-900: #0C0928;
+            --indigo: #5B2EF0;
+            --mint: #7CF3BC;
+            --paper: #F5F4FA;
+            --line: #E4E1F2;
+            --muted: #57556F;
+            --ease-out: cubic-bezier(.16, 1, .3, 1);
+            --shadow-sm: 0 1px 2px rgba(19,15,58,.06), 0 1px 1px rgba(19,15,58,.04);
+            --shadow-md: 0 1px 2px rgba(19,15,58,.05), 0 8px 24px -8px rgba(19,15,58,.14);
+            --shadow-lg: 0 2px 4px rgba(19,15,58,.05), 0 24px 48px -16px rgba(19,15,58,.24);
+        }
+        html { scroll-behavior: smooth; }
+        body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+        .font-display { font-variation-settings: "opsz" 96; letter-spacing: -0.035em; }
+        h1, h2, h3 { text-wrap: balance; }
+        ::selection { background: var(--mint); color: var(--night); }
+        :focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; border-radius: 8px; }
+        .on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--mint); }
+
+        /* Page switching */
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: pageIn .5s var(--ease-out) both; }
+        @keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+        /* Header */
+        .site-header { background: rgba(19,15,58,.82); backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); }
+        .nav-btn { position: relative; }
+        .nav-btn[aria-current="page"] { color: #fff; }
+        .nav-btn[aria-current="page"]::after {
+            content: ''; position: absolute; left: 16px; right: 16px; bottom: 4px; height: 2px;
+            background: var(--mint); border-radius: 2px;
+        }
+
+        /* Hero */
+        .hero-photo { background: url('Slika vlak.jpg') center 40% / cover no-repeat; }
+        .hero-shade { background:
+            linear-gradient(90deg, rgba(12,9,40,.94) 0%, rgba(12,9,40,.78) 45%, rgba(12,9,40,.25) 100%),
+            linear-gradient(0deg, rgba(12,9,40,.9) 0%, rgba(12,9,40,0) 40%); }
+        .hero-numeral {
+            font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; line-height: .8;
+            font-size: clamp(220px, 34vw, 520px); letter-spacing: -.02em;
+            color: rgba(124,243,188,.07); -webkit-text-stroke: 2px rgba(124,243,188,.8);
+        }
+
+        /* Surfaces */
+        .card { background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow-sm); }
+        .rule { height: 1px; background: var(--line); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-height: 48px; padding: 0 1.4rem;
+               border-radius: 999px; font-weight: 600; transition: transform .2s var(--ease-out), background-color .2s, box-shadow .2s, color .2s; cursor: pointer; }
+        .btn:active { transform: scale(.97); }
+        .btn-mint { background: var(--mint); color: var(--night); box-shadow: 0 8px 24px -10px rgba(124,243,188,.7); }
+        .btn-mint:hover { background: #9BF7CC; }
+        .btn-indigo { background: var(--indigo); color: #fff; box-shadow: 0 8px 24px -10px rgba(91,46,240,.7); }
+        .btn-indigo:hover { background: #4A20D6; }
+        .btn-ghost-dark { color: #fff; border: 1px solid rgba(255,255,255,.28); }
+        .btn-ghost-dark:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.5); }
+        .btn-ghost { color: var(--night); border: 1px solid var(--line); background: #fff; }
+        .btn-ghost:hover { border-color: #CDBEFD; background: #F3F0FF; }
+
+        /* Gallery */
+        .gallery-grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (min-width: 1024px) {
+            .gallery-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .gallery-grid .feature { grid-column: span 2; grid-row: span 2; }
+            .gallery-grid .feature .shot { aspect-ratio: auto; height: 100%; min-height: 420px; }
+        }
+        .shot { aspect-ratio: 4 / 3; overflow: hidden; border-radius: 16px; background: #E6DFFE; position: relative; }
+        .shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease-out); }
+        .gallery-item button:hover img, .gallery-item button:focus-visible img { transform: scale(1.04); }
+        .shot .zoom-hint { position: absolute; right: 12px; bottom: 12px; width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center;
+            background: rgba(255,255,255,.92); color: var(--night); opacity: 0; transform: translateY(6px); transition: all .3s var(--ease-out); }
+        .gallery-item button:hover .zoom-hint, .gallery-item button:focus-visible .zoom-hint { opacity: 1; transform: none; }
+
+        /* Lightbox */
+        #lightbox { display: none; }
+        #lightbox.open { display: flex; animation: fadeIn .25s ease both; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Matching game */
+        .matching-item { user-select: none; transition: border-color .2s, background-color .2s, transform .2s var(--ease-out); }
+        .matching-item:hover:not(.matched) { border-color: #CDBEFD; }
+        .matching-item.selected { border-color: var(--indigo); background-color: #F3F0FF; transform: translateX(4px); }
+        .matching-item.matched { border-color: #4FE6A0; background-color: #ECFEF5; cursor: default; }
+        .matching-item.wrong { animation: shake .4s; border-color: #F43F5E; }
+        @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+        /* ===== Clean the City game ===== */
+        .city-stage { position: relative; overflow: hidden; border-radius: 20px; aspect-ratio: 16 / 9; min-height: 300px;
+            background: linear-gradient(180deg, #CFE9FF 0%, #E9F4FF 55%, #F4F8FF 100%); isolation: isolate; }
+        @media (max-width: 640px) { .city-stage { aspect-ratio: 4 / 5; } }
+        .city-stage svg.skyline { position: absolute; left: 0; right: 0; bottom: 30%; width: 100%; height: 55%; z-index: 0; }
+        .city-ground { position: absolute; left: 0; right: 0; bottom: 0; height: 32%; z-index: 0;
+            background: linear-gradient(180deg, #9FD8A4 0 14%, #D9D6E4 14% 18%, #ECEAF3 18% 52%, #5F5B76 52% 100%); }
+        .city-ground::after { content: ''; position: absolute; left: 0; right: 0; bottom: 22%; height: 4px;
+            background: repeating-linear-gradient(90deg, #F5F4FA 0 36px, transparent 36px 72px); opacity: .8; }
+        .city-smog { position: absolute; inset: 0; z-index: 1; pointer-events: none; transition: opacity .8s ease;
+            background: radial-gradient(120% 80% at 50% 100%, rgba(94,82,60,.75), rgba(120,110,90,.45) 60%, rgba(140,130,110,.25)); opacity: 0; }
+        .city-sun { position: absolute; top: 9%; right: 10%; width: 64px; height: 64px; border-radius: 999px; z-index: 0;
+            background: radial-gradient(circle, #FFE58A 0 55%, rgba(255,229,138,0) 70%); transition: opacity .8s; }
+        .litter { position: absolute; z-index: 2; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 999px;
+            display: grid; place-items: center; font-size: 22px; background: #fff; color: var(--night);
+            box-shadow: 0 6px 14px -6px rgba(19,15,58,.45), 0 0 0 1px rgba(19,15,58,.06);
+            cursor: pointer; touch-action: manipulation; animation: drop .45s var(--ease-out) both;
+            transition: transform .2s var(--ease-out), box-shadow .2s; }
+        .litter:hover { transform: translateY(-3px); }
+        .litter.selected { transform: translateY(-6px) scale(1.12); box-shadow: 0 0 0 4px var(--indigo), 0 12px 20px -8px rgba(19,15,58,.5); }
+        .litter.old::before { content: ''; position: absolute; inset: -6px; border-radius: 999px; border: 2px dashed rgba(244,63,94,.6); animation: spin 6s linear infinite; }
+        .litter.gone { animation: binned .35s ease-in forwards; pointer-events: none; }
+        @keyframes drop { from { opacity: 0; transform: translateY(-24px) scale(.6); } to { opacity: 1; transform: none; } }
+        @keyframes binned { to { opacity: 0; transform: translateY(40px) scale(.3); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .bin { position: relative; border-radius: 16px; border: 2px solid transparent; min-height: 92px; padding: 12px 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            font-weight: 600; font-size: .9rem; cursor: pointer; touch-action: manipulation;
+            transition: transform .2s var(--ease-out), box-shadow .2s, border-color .2s; }
+        .bin:hover { transform: translateY(-2px); }
+        .bin.ready { border-color: var(--night); box-shadow: 0 10px 22px -12px rgba(19,15,58,.6); }
+        .bin.hit { animation: pop .35s var(--ease-out); }
+        .bin.miss { animation: shake .4s; }
+        @keyframes pop { 50% { transform: scale(1.06); } }
+        .bin kbd { position: absolute; top: 8px; left: 10px; font: 600 11px/1 Figtree, sans-serif; opacity: .65; }
+        .float-score { position: absolute; left: 50%; top: 0; transform: translateX(-50%); font-weight: 800; pointer-events: none;
+            animation: floatUp .9s var(--ease-out) forwards; }
+        @keyframes floatUp { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, -36px); } }
+        .meter { height: 8px; border-radius: 999px; background: rgba(255,255,255,.14); overflow: hidden; }
+        .meter > span { display: block; height: 100%; border-radius: inherit; transition: width .5s var(--ease-out), background-color .5s; }
+        .game-overlay { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; padding: 1.25rem;
+            background: rgba(12,9,40,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+        .tabular { font-variant-numeric: tabular-nums; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+        }
+    </style>
+</head>
+<body class="bg-canvas text-night font-sans flex flex-col min-h-screen">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-full focus:bg-mint-300 focus:text-night font-semibold">Skip to content</a>
+
+    <!-- HEADER & NAVIGATION -->
+    <header class="site-header on-dark sticky top-0 z-50 border-b border-white/10 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-[72px]">
+                <!-- Brand -->
+                <button type="button" class="flex items-center gap-3 text-left" onclick="navigateTo('welcome')" aria-label="Go to welcome page">
+                    <span class="w-10 h-10 rounded-[12px] bg-mint-300 text-night font-display font-extrabold text-lg grid place-items-center">11</span>
+                    <span>
+                        <span class="block font-display font-bold text-[17px] leading-tight tracking-tight">[EDIT: SDG 11 Hub]</span>
+                        <span class="hidden sm:block text-xs text-white/55">[EDIT: Sustainable Cities & Communities]</span>
+                    </span>
+                </button>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center gap-1" aria-label="Main">
+                    <button onclick="navigateTo('welcome')" id="nav-welcome" class="nav-btn px-4 py-2.5 rounded-full text-sm font-medium text-white/70 hover:text-white transition-colors" aria-current="page">Welcome</button>
+                    <button onclick="navigateTo('problem')" id="nav-problem" class="nav-btn px-4 py-2.5 rounded-full text-sm font-medium text-white/70 hover:text-white transition-colors">The Problem</button>
+                    <button onclick="navigateTo('gallery')" id="nav-gallery" class="nav-btn px-4 py-2.5 rounded-full text-sm font-medium text-white/70 hover:text-white transition-colors">Photo Gallery</button>
+                    <button onclick="navigateTo('actions')" id="nav-actions" class="nav-btn px-4 py-2.5 rounded-full text-sm font-medium text-white/70 hover:text-white transition-colors">Our Actions</button>
+                    <button onclick="navigateTo('team')" id="nav-team" class="nav-btn px-4 py-2.5 rounded-full text-sm font-medium text-white/70 hover:text-white transition-colors">Our Team</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden w-11 h-11 grid place-items-center rounded-full text-white/80 hover:bg-white/10" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+                    <i class="fas fa-bars text-lg" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="navigateTo('welcome'); toggleMobileMenu()" class="block w-full text-left px-3 py-3 rounded-xl text-base font-medium text-white/85 hover:bg-white/10">[EDIT: Welcome]</button>
+            <button onclick="navigateTo('problem'); toggleMobileMenu()" class="block w-full text-left px-3 py-3 rounded-xl text-base font-medium text-white/85 hover:bg-white/10">[EDIT: The Problem]</button>
+            <button onclick="navigateTo('gallery'); toggleMobileMenu()" class="block w-full text-left px-3 py-3 rounded-xl text-base font-medium text-white/85 hover:bg-white/10">[EDIT: Gallery]</button>
+            <button onclick="navigateTo('actions'); toggleMobileMenu()" class="block w-full text-left px-3 py-3 rounded-xl text-base font-medium text-white/85 hover:bg-white/10">[EDIT: Our Actions]</button>
+            <button onclick="navigateTo('team'); toggleMobileMenu()" class="block w-full text-left px-3 py-3 rounded-xl text-base font-medium text-white/85 hover:bg-white/10">[EDIT: Our Team]</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main id="main" class="flex-grow" tabindex="-1">
+
+        <!-- PAGE 1: WELCOME -->
+        <section id="page-welcome" class="page-section active">
+            <div class="on-dark relative bg-night text-white overflow-hidden">
+                <div class="hero-photo absolute inset-0" role="img" aria-label="A modern electric passenger train at a Slovenian station"></div>
+                <div class="hero-shade absolute inset-0"></div>
+                <div class="hero-numeral absolute -right-6 -bottom-10 select-none pointer-events-none hidden md:block" aria-hidden="true">11</div>
+
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 sm:pt-32 sm:pb-28 lg:pt-40 lg:pb-36">
+                    <p class="inline-flex items-center gap-2 text-sm font-medium text-mint-300 mb-6">
+                        <span class="w-2 h-2 rounded-full bg-mint-300"></span>
+                        [EDIT: Sustainable Development Goal 11]
+                    </p>
+                    <h1 class="font-display font-bold text-4xl sm:text-6xl lg:text-7xl leading-[1.02] max-w-4xl mb-7">
+                        [EDIT: SDG 11 Goal: Make Cities Inclusive, Safe, Resilient and Sustainable]
+                    </h1>
+                    <p class="text-lg sm:text-xl text-white/75 max-w-2xl mb-10 leading-relaxed">
+                        [EDIT: Insert a catchy subtitle or brief tagline here about your mission to transform urban living spaces into eco-friendly and safe hubs.]
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="navigateTo('problem')" class="btn btn-mint">[EDIT: Discover The Problem]</button>
+                        <button onclick="navigateTo('actions')" class="btn btn-ghost-dark">[EDIT: Explore Solutions]</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Who are we -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+                <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+                    <div class="lg:col-span-5">
+                        <h2 class="font-display font-bold text-4xl sm:text-5xl leading-[1.05]">[EDIT: Who Are We]</h2>
+                    </div>
+                    <div class="lg:col-span-7 lg:pt-2">
+                        <p class="text-xl sm:text-2xl leading-relaxed text-night/90 mb-6">
+                            [EDIT: Insert text introducing your group or organization here. Explain your background, your purpose for creating this platform, and how you aim to contribute toward sustainable urbanization.]
+                        </p>
+                        <p class="text-muted text-lg leading-relaxed mb-10 max-w-2xl">
+                            [EDIT: Additional details about your mission, school project details, passion for environmental architecture, or community outreach efforts can be added here.]
+                        </p>
+                        <div class="rule mb-8"></div>
+                        <div class="grid sm:grid-cols-3 gap-6">
+                            <button onclick="navigateTo('problem')" class="group text-left">
+                                <span class="block text-sm text-muted mb-1">Start here</span>
+                                <span class="font-display font-semibold text-lg group-hover:text-indigo-500 transition-colors">The problem <i class="fas fa-arrow-right text-sm ml-1 transition-transform group-hover:translate-x-1" aria-hidden="true"></i></span>
+                            </button>
+                            <button onclick="navigateTo('gallery')" class="group text-left">
+                                <span class="block text-sm text-muted mb-1">12 photos</span>
+                                <span class="font-display font-semibold text-lg group-hover:text-indigo-500 transition-colors">Our city, up close <i class="fas fa-arrow-right text-sm ml-1 transition-transform group-hover:translate-x-1" aria-hidden="true"></i></span>
+                            </button>
+                            <button onclick="navigateTo('actions')" class="group text-left">
+                                <span class="block text-sm text-muted mb-1">2 games</span>
+                                <span class="font-display font-semibold text-lg group-hover:text-indigo-500 transition-colors">Play and learn <i class="fas fa-arrow-right text-sm ml-1 transition-transform group-hover:translate-x-1" aria-hidden="true"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: THE PROBLEM -->
+        <section id="page-problem" class="page-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-24 sm:pb-28">
+
+                <header class="grid lg:grid-cols-12 gap-6 lg:gap-16 items-end mb-14 sm:mb-20">
+                    <div class="lg:col-span-7">
+                        <p class="text-indigo-500 font-semibold mb-4">[EDIT: Challenges in Urbanization]</p>
+                        <h2 class="font-display font-bold text-4xl sm:text-6xl leading-[1.02]">[EDIT: The Problem Header]</h2>
+                    </div>
+                    <p class="lg:col-span-5 text-muted text-lg leading-relaxed">[EDIT: Short introductory summary describing why sustainable urban design is urgent today.]</p>
+                </header>
+
+                <div class="grid md:grid-cols-2 gap-5 mb-5">
+                    <article class="card p-8 sm:p-10">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 grid place-items-center text-lg mb-8"><i class="fas fa-house-crack" aria-hidden="true"></i></div>
+                        <h3 class="font-display font-semibold text-2xl mb-3">[EDIT: Problem Detail Header 1 - Rapid Slum Expansion]</h3>
+                        <p class="text-muted leading-relaxed">[EDIT: Paragraph detailing specific urban issues such as overcrowding, inadequate housing conditions, poor sanitation, and lack of basic services for vulnerable populations.]</p>
+                    </article>
+                    <article class="card p-8 sm:p-10">
+                        <div class="w-12 h-12 rounded-2xl bg-mint-50 text-mint-700 grid place-items-center text-lg mb-8"><i class="fas fa-smog" aria-hidden="true"></i></div>
+                        <h3 class="font-display font-semibold text-2xl mb-3">[EDIT: Problem Detail Header 2 - Environmental Impact & Waste]</h3>
+                        <p class="text-muted leading-relaxed">[EDIT: Paragraph describing municipal waste mismanagement, heavy air and noise pollution, high carbon footprints, and lack of green public space in urban spaces.]</p>
+                    </article>
+                </div>
+
+                <article class="on-dark relative overflow-hidden rounded-[24px] bg-night text-white p-8 sm:p-12 lg:p-14 mb-5">
+                    <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-indigo-500/40 blur-3xl" aria-hidden="true"></div>
+                    <div class="relative grid lg:grid-cols-12 gap-8">
+                        <h3 class="lg:col-span-5 font-display font-semibold text-3xl sm:text-4xl leading-tight text-mint-300">[EDIT: Comprehensive Analysis of Urban Pressures]</h3>
+                        <div class="lg:col-span-7 space-y-5 text-white/75 text-lg leading-relaxed">
+                            <p>[EDIT: Longer description paragraph explaining systemic problems, climate vulnerabilities, transportation blockages, and unequal access to public transport systems.]</p>
+                            <p>[EDIT: Further detail on how uncontrolled sprawl harms ecosystems, strains municipal infrastructure, and degrades overall quality of life.]</p>
+                        </div>
+                    </div>
+                </article>
+
+                <div class="card p-8 sm:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                    <div>
+                        <h3 class="font-display font-semibold text-2xl mb-2">[EDIT: Want to learn more from official sources?]</h3>
+                        <p class="text-muted">[EDIT: Explore detailed global statistics and official UN progress reports on Goal 11.]</p>
+                    </div>
+                    <a href="https://sdgs.un.org/goals/goal11" target="_blank" rel="noopener noreferrer" class="btn btn-indigo shrink-0">
+                        [EDIT: Official UN SDG 11 Problem Page]
+                        <i class="fas fa-arrow-up-right-from-square text-sm" aria-hidden="true"></i>
+                        <span class="sr-only">(opens in a new tab)</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: GALLERY -->
+        <section id="page-gallery" class="page-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-24 sm:pb-28">
+
+                <header class="grid lg:grid-cols-12 gap-6 lg:gap-16 items-end mb-12 sm:mb-16">
+                    <div class="lg:col-span-7">
+                        <p class="text-indigo-500 font-semibold mb-4">[EDIT: Visual Collection]</p>
+                        <h2 class="font-display font-bold text-4xl sm:text-6xl leading-[1.02]">[EDIT: Sustainable City Gallery]</h2>
+                    </div>
+                    <p class="lg:col-span-5 text-muted text-lg leading-relaxed">[EDIT: Explore 12 photos highlighting sustainable urban innovations, challenges, and architectural projects.] Select a photo to view it full size.</p>
+                </header>
+
+                <div class="gallery-grid" id="gallery-grid">
+                    <figure class="gallery-item feature">
+                        <button type="button" class="block w-full h-full text-left" onclick="openLightbox(0)">
+                            <div class="shot"><img src="Slika bus.jpg" alt="[EDIT: Photo 1 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+1'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-4"><h3 class="font-display font-semibold text-xl mb-1">[EDIT: Photo 1 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 1 detailing sustainable urban housing or green space.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(1)">
+                            <div class="shot"><img src="Slika kartomat.jpg" alt="[EDIT: Photo 2 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+2'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 2 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 2 highlighting green public transportation networks.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(2)">
+                            <div class="shot"><img src="Slika ekoloski otok.jpg" alt="[EDIT: Photo 3 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+3'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 3 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 3 displaying rooftop solar energy and vertical gardens.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(3)">
+                            <div class="shot"><img src="Slika soncne celice.jpg" alt="[EDIT: Photo 4 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+4'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 4 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 4 depicting urban waste management initiatives.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(4)">
+                            <div class="shot"><img src="Slika vlak.jpg" alt="[EDIT: Photo 5 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+5'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 5 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 5 showing pedestrianized walkways and cycling lanes.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(5)">
+                            <div class="shot"><img src="Slika igrisce.jpg" alt="[EDIT: Photo 6 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+6'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 6 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 6 highlighting cultural heritage preservation efforts.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(6)">
+                            <div class="shot"><img src="Slika pitna fontana.jpg" alt="[EDIT: Photo 7 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+7'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 7 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 7 focusing on disaster-resilient infrastructure design.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(7)">
+                            <div class="shot"><img src="Slika kolesarka steza.jpg" alt="[EDIT: Photo 8 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+8'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 8 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 8 showing inclusive public parks and community areas.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(8)">
+                            <div class="shot"><img src="Slika polnilnica.jpg" alt="[EDIT: Photo 9 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+9'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 9 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 9 displaying urban agricultural roof gardens.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(9)">
+                            <div class="shot"><img src="Slika botanicni vrt.jpg" alt="[EDIT: Photo 10 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+10'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 10 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 10 illustrating smart energy grid systems.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(10)">
+                            <div class="shot"><img src="Slika reflektorji.jpg" alt="[EDIT: Photo 11 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+11'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 11 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 11 highlighting clean electric mobility solutions.]</p></figcaption>
+                    </figure>
+                    <figure class="gallery-item">
+                        <button type="button" class="block w-full text-left" onclick="openLightbox(11)">
+                            <div class="shot"><img src="Slika koles.jpg" alt="[EDIT: Photo 12 Title]" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/600x400/130F3A/ffffff?text=Image+12'"><span class="zoom-hint" aria-hidden="true"><i class="fas fa-expand"></i></span></div>
+                        </button>
+                        <figcaption class="pt-3"><h3 class="font-display font-semibold mb-1">[EDIT: Photo 12 Title]</h3><p class="text-sm text-muted">[EDIT: Description of Photo 12 showcasing sustainable municipal water recycling.]</p></figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: OUR ACTIONS -->
+        <section id="page-actions" class="page-section">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-24 sm:pb-28">
+
+                <header class="grid lg:grid-cols-12 gap-6 lg:gap-16 items-end mb-12 sm:mb-16">
+                    <div class="lg:col-span-7">
+                        <p class="text-indigo-500 font-semibold mb-4">[EDIT: Connect Solutions]</p>
+                        <h2 class="font-display font-bold text-4xl sm:text-6xl leading-[1.02]">[EDIT: Our Actions - Connect Problems to Solutions]</h2>
+                    </div>
+                    <p class="lg:col-span-5 text-muted text-lg leading-relaxed">[EDIT: Click a problem on the left, then click its corresponding solution on the right to match them up!]</p>
+                </header>
+
+                <!-- GAME 1: Matching -->
+                <div class="card p-6 sm:p-10" style="box-shadow: var(--shadow-md)">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                        <div class="flex items-center gap-3">
+                            <span class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-500 grid place-items-center"><i class="fas fa-link" aria-hidden="true"></i></span>
+                            <div>
+                                <h3 class="font-display font-semibold text-xl leading-tight">Match the solution</h3>
+                                <p class="text-sm text-muted"><span id="match-progress" class="tabular">0</span> of 4 matched</p>
+                            </div>
+                        </div>
+                        <button onclick="resetGame()" class="btn btn-ghost text-sm min-h-[44px]"><i class="fas fa-rotate-left" aria-hidden="true"></i>Reset game</button>
+                    </div>
+
+                    <div id="game-status" role="status" aria-live="polite" class="mb-8 px-5 py-4 rounded-2xl bg-indigo-50 text-night font-medium flex items-center gap-3">
+                        <i class="fas fa-hand-pointer text-indigo-500" aria-hidden="true"></i>
+                        <span>Select a problem on the left to start matching.</span>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-semibold text-muted mb-4 flex items-center gap-2">
+                                <i class="fas fa-triangle-exclamation text-rose-500" aria-hidden="true"></i>[EDIT: Urban Problems]
+                            </h4>
+                            <div class="space-y-3" id="problems-list">
+                                <button type="button" data-id="1" onclick="selectProblem(this)" class="matching-item w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white flex items-center justify-between gap-4">
+                                    <span class="font-medium">[EDIT: Problem 1 - High air pollution from fossil fuel cars]</span>
+                                    <i class="fas fa-circle text-[10px] text-slate-300 status-icon" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-id="2" onclick="selectProblem(this)" class="matching-item w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white flex items-center justify-between gap-4">
+                                    <span class="font-medium">[EDIT: Problem 2 - Slums and unsanitary informal housing]</span>
+                                    <i class="fas fa-circle text-[10px] text-slate-300 status-icon" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-id="3" onclick="selectProblem(this)" class="matching-item w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white flex items-center justify-between gap-4">
+                                    <span class="font-medium">[EDIT: Problem 3 - Overflows of unmanaged municipal waste]</span>
+                                    <i class="fas fa-circle text-[10px] text-slate-300 status-icon" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-id="4" onclick="selectProblem(this)" class="matching-item w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white flex items-center justify-between gap-4">
+                                    <span class="font-medium">[EDIT: Problem 4 - Extreme vulnerability to natural disasters]</span>
+                                    <i class="fas fa-circle text-[10px] text-slate-300 status-icon" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-muted mb-4 flex items-center gap-2">
+                                <i class="fas fa-lightbulb text-mint-500" aria-hidden="true"></i>[EDIT: Sustainable Solutions]
+                            </h4>
+                            <div class="space-y-3" id="solutions-list">
+                                <button type="button" data-id="3" onclick="selectSolution(this)" class="matching-item w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white flex items-center justify-between gap-4">
+                                    <span class="font-medium">[EDIT: Solution C - Community recycling and composting programs]</span>
+                                    <i class="fas fa-circle text-[10px] text-slate-300 status-icon" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-id="1" onclick="selectSolution(this)" class="matching-item w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white flex items-center justify-between gap-4">
+                                    <span class="font-medium">[EDIT: Solution A - Expand electric public transport & bike paths]</span>
+                                    <i class="fas fa-circle text-[10px] text-slate-300 status-icon" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-id="4" onclick="selectSolution(this)" class="matching-item w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white flex items-center justify-between gap-4">
+                                    <span class="font-medium">[EDIT: Solution D - Build climate-resilient early warning urban infrastructure]</span>
+                                    <i class="fas fa-circle text-[10px] text-slate-300 status-icon" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" data-id="2" onclick="selectSolution(this)" class="matching-item w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white flex items-center justify-between gap-4">
+                                    <span class="font-medium">[EDIT: Solution B - Subsidized affordable eco-housing projects]</span>
+                                    <i class="fas fa-circle text-[10px] text-slate-300 status-icon" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GAME 2: Clean the City -->
+                <div id="clean-city" class="on-dark mt-8 rounded-[24px] bg-night text-white p-4 sm:p-8 lg:p-10" style="box-shadow: var(--shadow-lg)">
+                    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-6 px-2 sm:px-0">
+                        <div class="flex items-center gap-3">
+                            <span class="w-11 h-11 rounded-2xl bg-mint-300 text-night grid place-items-center"><i class="fas fa-broom" aria-hidden="true"></i></span>
+                            <div>
+                                <h3 class="font-display font-semibold text-2xl leading-tight">Clean the city</h3>
+                                <p class="text-sm text-white/60">Tap litter on the street, then tap the bin it belongs in.</p>
+                            </div>
+                        </div>
+                        <dl class="grid grid-cols-3 gap-6 sm:gap-10 text-left">
+                            <div><dt class="text-xs text-white/55 mb-1">Score</dt><dd id="cc-score" class="font-display font-bold text-2xl tabular">0</dd></div>
+                            <div><dt class="text-xs text-white/55 mb-1">Time</dt><dd id="cc-time" class="font-display font-bold text-2xl tabular">60s</dd></div>
+                            <div class="min-w-[110px]">
+                                <dt class="text-xs text-white/55 mb-1">City cleanliness</dt>
+                                <dd class="pt-2.5"><div class="meter" role="meter" aria-label="City cleanliness" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" id="cc-meter"><span id="cc-meter-bar" style="width:100%; background:#7CF3BC"></span></div></dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- Street scene -->
+                    <div class="city-stage" id="cc-stage">
+                        <div class="city-sun" id="cc-sun"></div>
+                        <svg class="skyline" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+                            <g fill="#B9B0F5">
+                                <rect x="10" y="120" width="90" height="180"/><rect x="110" y="70" width="70" height="230"/><rect x="190" y="150" width="110" height="150"/>
+                                <rect x="420" y="40" width="80" height="260"/><rect x="510" y="110" width="120" height="190"/><rect x="760" y="90" width="90" height="210"/>
+                                <rect x="860" y="140" width="130" height="160"/><rect x="1000" y="60" width="80" height="240"/><rect x="1090" y="130" width="110" height="170"/>
+                            </g>
+                            <g fill="#7D6BEA">
+                                <rect x="60" y="170" width="100" height="130" rx="4"/><rect x="250" y="100" width="90" height="200" rx="4"/><rect x="350" y="160" width="80" height="140" rx="4"/>
+                                <rect x="600" y="130" width="100" height="170" rx="4"/><rect x="700" y="180" width="80" height="120" rx="4"/><rect x="930" y="110" width="90" height="190" rx="4"/>
+                                <rect x="1060" y="190" width="110" height="110" rx="4"/>
+                            </g>
+                            <g fill="#E6DFFE" opacity=".85">
+                                <rect x="268" y="120" width="12" height="16"/><rect x="292" y="120" width="12" height="16"/><rect x="316" y="120" width="12" height="16"/>
+                                <rect x="268" y="150" width="12" height="16"/><rect x="292" y="150" width="12" height="16"/><rect x="316" y="150" width="12" height="16"/>
+                                <rect x="618" y="150" width="14" height="18"/><rect x="644" y="150" width="14" height="18"/><rect x="670" y="150" width="14" height="18"/>
+                                <rect x="618" y="184" width="14" height="18"/><rect x="644" y="184" width="14" height="18"/><rect x="670" y="184" width="14" height="18"/>
+                                <rect x="948" y="130" width="12" height="16"/><rect x="972" y="130" width="12" height="16"/><rect x="996" y="130" width="12" height="16"/>
+                                <rect x="78" y="190" width="12" height="16"/><rect x="104" y="190" width="12" height="16"/><rect x="130" y="190" width="12" height="16"/>
+                            </g>
+                            <g fill="#3FB27A">
+                                <circle cx="190" cy="270" r="30"/><circle cx="470" cy="275" r="26"/><circle cx="560" cy="268" r="32"/><circle cx="830" cy="272" r="28"/><circle cx="1120" cy="270" r="30"/>
+                            </g>
+                        </svg>
+                        <div class="city-ground" aria-hidden="true"></div>
+                        <div class="city-smog" id="cc-smog" aria-hidden="true"></div>
+                        <div id="cc-litter-layer" class="absolute inset-0 z-[2]" aria-label="Litter on the street"></div>
+
+                        <!-- Start / end overlay -->
+                        <div class="game-overlay" id="cc-overlay">
+                            <div class="text-center max-w-md">
+                                <div id="cc-overlay-body">
+                                    <h4 class="font-display font-bold text-3xl sm:text-4xl mb-3">Our street needs you</h4>
+                                    <p class="text-white/75 mb-6 leading-relaxed">Litter keeps landing on the street. Sort each piece into the right bin before the city fills up. You have 60 seconds.</p>
+                                </div>
+                                <button id="cc-start" class="btn btn-mint" onclick="startCleanGame()"><i class="fas fa-play" aria-hidden="true"></i>Start cleaning</button>
+                                <p id="cc-best" class="text-sm text-white/55 mt-4"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p id="cc-status" role="status" aria-live="polite" class="min-h-[28px] mt-4 mb-3 px-2 sm:px-0 text-white/80 font-medium">Press start when you are ready.</p>
+
+                    <!-- Bins -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="cc-bins">
+                        <button type="button" class="bin" data-bin="plastic" onclick="dropInBin('plastic')" style="background:#FFD54A; color:#130F3A">
+                            <kbd>1</kbd><i class="fas fa-trash-can text-2xl" aria-hidden="true"></i><span>Plastic &amp; cans</span>
+                        </button>
+                        <button type="button" class="bin" data-bin="paper" onclick="dropInBin('paper')" style="background:#3B82F6; color:#fff">
+                            <kbd>2</kbd><i class="fas fa-trash-can text-2xl" aria-hidden="true"></i><span>Paper</span>
+                        </button>
+                        <button type="button" class="bin" data-bin="glass" onclick="dropInBin('glass')" style="background:#22A55A; color:#fff">
+                            <kbd>3</kbd><i class="fas fa-trash-can text-2xl" aria-hidden="true"></i><span>Glass</span>
+                        </button>
+                        <button type="button" class="bin" data-bin="organic" onclick="dropInBin('organic')" style="background:#8B5A2B; color:#fff">
+                            <kbd>4</kbd><i class="fas fa-trash-can text-2xl" aria-hidden="true"></i><span>Organic</span>
+                        </button>
+                    </div>
+                    <p class="text-xs text-white/50 mt-4 px-2 sm:px-0">Keyboard: Tab to a piece of litter and press Enter, then press 1–4 to choose a bin. Litter with a red ring has been on the street too long.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: OUR TEAM -->
+        <section id="page-team" class="page-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-24 sm:pb-28">
+
+                <header class="grid lg:grid-cols-12 gap-6 lg:gap-16 items-end mb-12 sm:mb-16">
+                    <div class="lg:col-span-7">
+                        <p class="text-indigo-500 font-semibold mb-4">[EDIT: Project Creators]</p>
+                        <h2 class="font-display font-bold text-4xl sm:text-6xl leading-[1.02]">[EDIT: Meet Our Team]</h2>
+                    </div>
+                    <p class="lg:col-span-5 text-muted text-lg leading-relaxed">[EDIT: Learn more about the students behind this project and watch their video presentations.]</p>
+                </header>
+
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <!-- Student 1 -->
+                    <article class="card p-6 sm:p-8 flex flex-col" style="box-shadow: var(--shadow-md)">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 rounded-2xl bg-indigo-500 text-white font-display font-bold text-xl grid place-items-center shrink-0">VR</div>
+                            <div>
+                                <h3 class="font-display font-semibold text-2xl leading-tight">Vasja Rebec</h3>
+                                <p class="text-indigo-500 font-medium text-sm">[EDIT: Role / Title - e.g., Urban Planning Researcher]</p>
+                            </div>
+                        </div>
+                        <p class="text-muted leading-relaxed mb-8 flex-grow">[EDIT: Short description about Student 1. Detail their contribution to the SDG 11 project, academic background, interests in sustainable design, and key takeaways.]</p>
+                        <div>
+                            <p class="text-sm font-semibold text-muted mb-3">Video presentation</p>
+                            <div class="aspect-video bg-night rounded-2xl overflow-hidden">
+                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/G3OyUB5k_FQ" title="Vasja Rebec video presentation" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Student 2 -->
+                    <article class="card p-6 sm:p-8 flex flex-col" style="box-shadow: var(--shadow-md)">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 rounded-2xl bg-mint-300 text-night font-display font-bold text-xl grid place-items-center shrink-0">TS</div>
+                            <div>
+                                <h3 class="font-display font-semibold text-2xl leading-tight">Tom Samsa</h3>
+                                <p class="text-mint-700 font-medium text-sm">[EDIT: Role / Title - e.g., Sustainability Developer]</p>
+                            </div>
+                        </div>
+                        <p class="text-muted leading-relaxed mb-8 flex-grow">[EDIT: Short description about Student 2. Detail their contribution to the SDG 11 project, academic background, interests in eco-technology, and team management.]</p>
+                        <div>
+                            <p class="text-sm font-semibold text-muted mb-3">Video presentation</p>
+                            <div class="aspect-video bg-night rounded-2xl overflow-hidden">
+                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/JBCuhOcTkSE" title="Tom Samsa video presentation" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="on-dark fixed inset-0 z-[80] bg-night-900/95 items-center justify-center p-4 sm:p-10" role="dialog" aria-modal="true" aria-label="Photo viewer" onclick="if(event.target===this) closeLightbox()">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center" aria-label="Close photo viewer"><i class="fas fa-xmark text-xl" aria-hidden="true"></i></button>
+        <button onclick="stepLightbox(-1)" class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center" aria-label="Previous photo"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+        <button onclick="stepLightbox(1)" class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center" aria-label="Next photo"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+        <figure class="max-w-5xl w-full text-center">
+            <img id="lightbox-img" src="" alt="" class="mx-auto max-h-[75vh] w-auto rounded-xl object-contain">
+            <figcaption class="mt-4 text-white">
+                <span id="lightbox-title" class="font-display font-semibold text-lg"></span>
+                <span id="lightbox-count" class="block text-sm text-white/55 tabular mt-1"></span>
+            </figcaption>
+        </figure>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="on-dark bg-night text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
+            <div class="grid md:grid-cols-12 gap-10">
+                <div class="md:col-span-5">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="w-10 h-10 rounded-[12px] bg-mint-300 text-night font-display font-extrabold text-lg grid place-items-center">11</span>
+                        <span class="font-display font-bold text-lg">[EDIT: SDG 11 Title]</span>
+                    </div>
+                    <p class="text-white/60 leading-relaxed max-w-sm">[EDIT: Footer paragraph describing the goals of this web platform and promoting sustainable cities.]</p>
+                </div>
+                <nav class="md:col-span-3" aria-label="Footer">
+                    <h4 class="text-sm font-semibold text-white mb-4">[EDIT: Page Navigation]</h4>
+                    <ul class="space-y-2.5 text-white/65">
+                        <li><button onclick="navigateTo('welcome')" class="hover:text-mint-300 transition-colors">[EDIT: Welcome Page]</button></li>
+                        <li><button onclick="navigateTo('problem')" class="hover:text-mint-300 transition-colors">[EDIT: The Problem]</button></li>
+                        <li><button onclick="navigateTo('gallery')" class="hover:text-mint-300 transition-colors">[EDIT: Photo Gallery]</button></li>
+                        <li><button onclick="navigateTo('actions')" class="hover:text-mint-300 transition-colors">[EDIT: Our Actions]</button></li>
+                        <li><button onclick="navigateTo('team')" class="hover:text-mint-300 transition-colors">[EDIT: Our Team]</button></li>
+                    </ul>
+                </nav>
+                <div class="md:col-span-4">
+                    <h4 class="text-sm font-semibold text-white mb-4">[EDIT: Contact & Credits]</h4>
+                    <p class="text-white/65 mb-1.5">[EDIT: School/University Name]</p>
+                    <p class="text-white/65 mb-5">[EDIT: contact@example.com]</p>
+                    <div class="flex gap-2">
+                        <a href="#" class="w-11 h-11 rounded-full border border-white/15 grid place-items-center text-white/70 hover:text-white hover:border-white/40 transition-colors" aria-label="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                        <a href="#" class="w-11 h-11 rounded-full border border-white/15 grid place-items-center text-white/70 hover:text-white hover:border-white/40 transition-colors" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+                        <a href="#" class="w-11 h-11 rounded-full border border-white/15 grid place-items-center text-white/70 hover:text-white hover:border-white/40 transition-colors" aria-label="YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-14 pt-6 border-t border-white/10 text-sm text-white/45">
+                [EDIT: © 2026 Sustainable Cities Project. All rights reserved.]
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ============ Navigation ============ */
+        const PAGES = ['welcome', 'problem', 'gallery', 'actions', 'team'];
+
+        function navigateTo(pageId, opts = {}) {
+            if (!PAGES.includes(pageId)) pageId = 'welcome';
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) target.classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.removeAttribute('aria-current'));
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if (activeBtn) activeBtn.setAttribute('aria-current', 'page');
+
+            if (pageId !== 'actions') stopCleanGame(true);
+            if (!opts.fromHash && location.hash !== '#' + pageId) history.pushState(null, '', '#' + pageId);
+            window.scrollTo({ top: 0, behavior: opts.instant ? 'auto' : 'smooth' });
+        }
+
+        window.addEventListener('popstate', () => navigateTo(location.hash.slice(1) || 'welcome', { fromHash: true }));
+        document.addEventListener('DOMContentLoaded', () => {
+            const initial = location.hash.slice(1);
+            if (PAGES.includes(initial)) navigateTo(initial, { fromHash: true, instant: true });
+            showBestScore();
+        });
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const btn = document.getElementById('mobile-menu-btn');
+            const open = menu.classList.toggle('hidden') === false;
+            btn.setAttribute('aria-expanded', String(open));
+            btn.querySelector('i').className = open ? 'fas fa-xmark text-lg' : 'fas fa-bars text-lg';
+        }
+
+        /* ============ Gallery lightbox ============ */
+        let lightboxIndex = 0;
+        let lightboxReturnFocus = null;
+        function galleryItems() { return [...document.querySelectorAll('#gallery-grid .gallery-item')]; }
+        function renderLightbox() {
+            const items = galleryItems();
+            const item = items[lightboxIndex];
+            const img = item.querySelector('img');
+            document.getElementById('lightbox-img').src = img.src;
+            document.getElementById('lightbox-img').alt = img.alt;
+            document.getElementById('lightbox-title').textContent = item.querySelector('h3').textContent;
+            document.getElementById('lightbox-count').textContent = `${lightboxIndex + 1} / ${items.length}`;
+        }
+        function openLightbox(i) {
+            lightboxReturnFocus = document.activeElement;
+            lightboxIndex = i;
+            renderLightbox();
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            document.querySelector('#lightbox button').focus();
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+            if (lightboxReturnFocus) lightboxReturnFocus.focus();
+        }
+        function stepLightbox(d) {
+            const n = galleryItems().length;
+            lightboxIndex = (lightboxIndex + d + n) % n;
+            renderLightbox();
+        }
+
+        /* ============ Game 1: Matching ============ */
+        let selectedProblem = null;
+        let selectedSolution = null;
+        let matchesCount = 0;
+        const totalMatches = 4;
+
+        function selectProblem(element) {
+            if (element.classList.contains('matched')) return;
+            document.querySelectorAll('#problems-list .matching-item:not(.matched)').forEach(i => i.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedProblem = element;
+            updateStatus('Now choose the matching solution on the right.', null, 'fa-arrow-right');
+            checkMatch();
+        }
+
+        function selectSolution(element) {
+            if (element.classList.contains('matched')) return;
+            document.querySelectorAll('#solutions-list .matching-item:not(.matched)').forEach(i => i.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedSolution = element;
+            if (!selectedProblem) updateStatus('Now choose a problem on the left to match.', null, 'fa-arrow-left');
+            else checkMatch();
+        }
+
+        function checkMatch() {
+            if (!(selectedProblem && selectedSolution)) return;
+            const p = selectedProblem, s = selectedSolution;
+            if (p.dataset.id === s.dataset.id) {
+                [p, s].forEach(el => {
+                    el.classList.remove('selected');
+                    el.classList.add('matched');
+                    el.setAttribute('aria-disabled', 'true');
+                    el.querySelector('.status-icon').className = 'fas fa-circle-check text-mint-600 status-icon';
+                });
+                selectedProblem = selectedSolution = null;
+                matchesCount++;
+                document.getElementById('match-progress').textContent = matchesCount;
+                if (matchesCount === totalMatches) updateStatus('All four matched. Every problem has a solution.', true, 'fa-trophy');
+                else updateStatus('Correct match. Pick another problem.', true, 'fa-circle-check');
+            } else {
+                updateStatus('Not a match. Try a different pair.', false, 'fa-circle-xmark');
+                [p, s].forEach(el => { el.classList.add('wrong'); });
+                setTimeout(() => {
+                    [p, s].forEach(el => el.classList.remove('selected', 'wrong'));
+                    if (selectedProblem === p) selectedProblem = null;
+                    if (selectedSolution === s) selectedSolution = null;
+                }, 600);
+            }
+        }
+
+        function updateStatus(message, isSuccess = null, icon = 'fa-hand-pointer') {
+            const box = document.getElementById('game-status');
+            const tone = isSuccess === true ? ['bg-mint-50', 'text-mint-700'] : isSuccess === false ? ['bg-rose-50', 'text-rose-600'] : ['bg-indigo-50', 'text-indigo-500'];
+            box.className = `mb-8 px-5 py-4 rounded-2xl ${tone[0]} text-night font-medium flex items-center gap-3`;
+            box.innerHTML = `<i class="fas ${icon} ${tone[1]}" aria-hidden="true"></i><span></span>`;
+            box.querySelector('span').textContent = message;
+        }
+
+        function resetGame() {
+            selectedProblem = selectedSolution = null;
+            matchesCount = 0;
+            document.getElementById('match-progress').textContent = 0;
+            document.querySelectorAll('.matching-item').forEach(item => {
+                item.classList.remove('selected', 'matched', 'wrong');
+                item.removeAttribute('aria-disabled');
+                const icon = item.querySelector('.status-icon');
+                if (icon) icon.className = 'fas fa-circle text-[10px] text-slate-300 status-icon';
+            });
+            updateStatus('Select a problem on the left to start matching.');
+        }
+
+        /* ============ Game 2: Clean the City ============ */
+        const WASTE = [
+            { type: 'plastic', icon: 'fa-bottle-water', name: 'Plastic bottle' },
+            { type: 'plastic', icon: 'fa-bag-shopping', name: 'Plastic bag' },
+            { type: 'plastic', icon: 'fa-prescription-bottle', name: 'Shampoo bottle' },
+            { type: 'paper',   icon: 'fa-newspaper', name: 'Newspaper' },
+            { type: 'paper',   icon: 'fa-box-open', name: 'Cardboard box' },
+            { type: 'paper',   icon: 'fa-envelope', name: 'Envelope' },
+            { type: 'glass',   icon: 'fa-wine-bottle', name: 'Glass bottle' },
+            { type: 'glass',   icon: 'fa-jar', name: 'Glass jar' },
+            { type: 'organic', icon: 'fa-apple-whole', name: 'Apple core' },
+            { type: 'organic', icon: 'fa-carrot', name: 'Vegetable scraps' },
+            { type: 'organic', icon: 'fa-leaf', name: 'Fallen leaves' },
+            { type: 'organic', icon: 'fa-egg', name: 'Eggshells' }
+        ];
+        const BIN_NAMES = { plastic: 'Plastic & cans', paper: 'Paper', glass: 'Glass', organic: 'Organic' };
+        const GAME_SECONDS = 60;
+        const MAX_LITTER = 10;      // city is overrun at this many pieces
+        const OLD_AFTER_MS = 7000;  // litter left this long costs extra
+
+        const cc = { running: false, score: 0, time: GAME_SECONDS, sorted: 0, mistakes: 0, combo: 0,
+                     litter: new Map(), selected: null, nextId: 1, tickTimer: null, spawnTimer: null, startedAt: 0 };
+
+        const $ = id => document.getElementById(id);
+
+        function readBest() { try { return Number(localStorage.getItem('cc-best') || 0); } catch (e) { return 0; } }
+        function writeBest(v) { try { localStorage.setItem('cc-best', String(v)); } catch (e) {} }
+        function showBestScore() { const b = readBest(); $('cc-best').textContent = b ? `Your best score: ${b}` : ''; }
+
+        function setCCStatus(msg) { $('cc-status').textContent = msg; }
+
+        function startCleanGame() {
+            stopCleanGame(true);
+            Object.assign(cc, { running: true, score: 0, time: GAME_SECONDS, sorted: 0, mistakes: 0, combo: 0, selected: null, startedAt: Date.now() });
+            $('cc-litter-layer').innerHTML = '';
+            cc.litter.clear();
+            $('cc-overlay').style.display = 'none';
+            updateHud();
+            setCCStatus('Go! Tap a piece of litter.');
+            for (let i = 0; i < 3; i++) spawnLitter();
+            cc.tickTimer = setInterval(tick, 1000);
+            scheduleSpawn();
+            const first = $('cc-litter-layer').querySelector('.litter');
+            if (first) first.focus({ preventScroll: true });
+        }
+
+        function stopCleanGame(silent) {
+            clearInterval(cc.tickTimer); clearTimeout(cc.spawnTimer);
+            if (!cc.running) return;
+            cc.running = false;
+            if (silent) {
+                $('cc-overlay').style.display = '';
+                $('cc-litter-layer').innerHTML = ''; cc.litter.clear(); cc.selected = null;
+                updateHud(); setCCStatus('Press start when you are ready.');
+            }
+        }
+
+        function scheduleSpawn() {
+            const elapsed = (Date.now() - cc.startedAt) / 1000;
+            const delay = Math.max(650, 1700 - elapsed * 18);   // speeds up over time
+            cc.spawnTimer = setTimeout(() => {
+                if (!cc.running) return;
+                spawnLitter();
+                scheduleSpawn();
+            }, delay);
+        }
+
+        function spawnLitter() {
+            if (cc.litter.size >= MAX_LITTER) { endCleanGame('overrun'); return; }
+            const kind = WASTE[Math.floor(Math.random() * WASTE.length)];
+            const id = cc.nextId++;
+            // place on the pavement band (avoid overlapping other litter too closely)
+            let x, y, tries = 0;
+            do {
+                x = 7 + Math.random() * 86;
+                y = 70 + Math.random() * 20;
+                tries++;
+            } while (tries < 12 && [...cc.litter.values()].some(l => Math.abs(l.x - x) < 9 && Math.abs(l.y - y) < 12));
+            const el = document.createElement('button');
+            el.type = 'button';
+            el.className = 'litter';
+            el.style.left = x + '%';
+            el.style.top = y + '%';
+            el.innerHTML = `<i class="fas ${kind.icon}" aria-hidden="true"></i>`;
+            el.setAttribute('aria-label', kind.name);
+            el.setAttribute('aria-pressed', 'false');
+            el.addEventListener('click', () => selectLitter(id));
+            $('cc-litter-layer').appendChild(el);
+            const item = { id, ...kind, x, y, el, born: Date.now() };
+            item.oldTimer = setTimeout(() => el.classList.add('old'), OLD_AFTER_MS);
+            cc.litter.set(id, item);
+            updateHud();
+            if (cc.litter.size >= MAX_LITTER) endCleanGame('overrun');
+        }
+
+        function selectLitter(id) {
+            if (!cc.running) return;
+            const item = cc.litter.get(id);
+            if (!item) return;
+            if (cc.selected && cc.litter.get(cc.selected)) {
+                const prev = cc.litter.get(cc.selected);
+                prev.el.classList.remove('selected'); prev.el.setAttribute('aria-pressed', 'false');
+            }
+            if (cc.selected === id) { cc.selected = null; markBins(false); setCCStatus('Tap a piece of litter.'); return; }
+            cc.selected = id;
+            item.el.classList.add('selected'); item.el.setAttribute('aria-pressed', 'true');
+            markBins(true);
+            setCCStatus(`${item.name}: which bin does it go in?`);
+        }
+
+        function markBins(on) { document.querySelectorAll('#cc-bins .bin').forEach(b => b.classList.toggle('ready', on)); }
+
+        function dropInBin(bin) {
+            if (!cc.running) { setCCStatus('Press start to play.'); return; }
+            const item = cc.selected && cc.litter.get(cc.selected);
+            const binEl = document.querySelector(`#cc-bins [data-bin="${bin}"]`);
+            if (!item) { setCCStatus('First tap a piece of litter on the street.'); return; }
+
+            binEl.classList.remove('hit', 'miss'); void binEl.offsetWidth;
+            if (item.type === bin) {
+                cc.combo++;
+                const old = Date.now() - item.born > OLD_AFTER_MS;
+                const gained = 10 + Math.min(cc.combo - 1, 5) * 2 - (old ? 4 : 0);
+                cc.score += gained; cc.sorted++;
+                binEl.classList.add('hit');
+                floatText(binEl, `+${gained}`, '#130F3A');
+                removeLitter(item.id, true);
+                setCCStatus(cc.combo > 2 ? `Correct! ${cc.combo} in a row.` : `Correct! ${item.name} goes in ${BIN_NAMES[bin]}.`);
+            } else {
+                cc.combo = 0; cc.mistakes++;
+                cc.score = Math.max(0, cc.score - 5);
+                binEl.classList.add('miss');
+                floatText(binEl, '−5', '#BE123C');
+                setCCStatus(`Not quite. ${item.name} belongs in ${BIN_NAMES[item.type]}.`);
+                item.el.classList.remove('selected'); item.el.setAttribute('aria-pressed', 'false');
+                cc.selected = null;
+            }
+            markBins(false);
+            updateHud();
+            // move keyboard focus to the next piece of litter
+            const next = $('cc-litter-layer').querySelector('.litter:not(.gone)');
+            if (next && document.activeElement && document.activeElement.classList.contains('bin')) next.focus({ preventScroll: true });
+        }
+
+        function removeLitter(id, animate) {
+            const item = cc.litter.get(id);
+            if (!item) return;
+            clearTimeout(item.oldTimer);
+            cc.litter.delete(id);
+            if (cc.selected === id) cc.selected = null;
+            if (animate) { item.el.classList.add('gone'); setTimeout(() => item.el.remove(), 360); }
+            else item.el.remove();
+        }
+
+        function floatText(anchor, text, color) {
+            const s = document.createElement('span');
+            s.className = 'float-score';
+            s.style.color = anchor.dataset.bin === 'plastic' ? '#130F3A' : '#fff';
+            s.textContent = text;
+            anchor.appendChild(s);
+            setTimeout(() => s.remove(), 900);
+        }
+
+        function tick() {
+            cc.time--;
+            updateHud();
+            if (cc.time <= 0) endCleanGame('time');
+        }
+
+        function updateHud() {
+            $('cc-score').textContent = cc.score;
+            $('cc-time').textContent = cc.time + 's';
+            const clean = Math.round(100 - (cc.litter.size / MAX_LITTER) * 100);
+            const bar = $('cc-meter-bar');
+            bar.style.width = clean + '%';
+            bar.style.backgroundColor = clean > 60 ? '#7CF3BC' : clean > 30 ? '#FFD54A' : '#FB7185';
+            $('cc-meter').setAttribute('aria-valuenow', String(clean));
+            $('cc-smog').style.opacity = String(Math.min(.85, (100 - clean) / 110));
+            $('cc-sun').style.opacity = String(Math.max(.25, clean / 100));
+        }
+
+        function endCleanGame(reason) {
+            if (!cc.running) return;
+            cc.running = false;
+            clearInterval(cc.tickTimer); clearTimeout(cc.spawnTimer);
+            markBins(false);
+            const best = readBest();
+            const newBest = cc.score > best;
+            if (newBest) writeBest(cc.score);
+            const attempts = cc.sorted + cc.mistakes;
+            const accuracy = attempts ? Math.round((cc.sorted / attempts) * 100) : 0;
+            const title = reason === 'overrun' ? 'The street filled up' : (cc.sorted >= 25 ? 'Spotless city!' : 'Time is up');
+            const lead = reason === 'overrun'
+                ? 'Too much litter piled up at once. Sort faster to keep the city clean.'
+                : 'Every item sorted correctly can be recycled or composted instead of ending up in landfill.';
+            $('cc-overlay-body').innerHTML = `
+                <h4 class="font-display font-bold text-3xl sm:text-4xl mb-3"></h4>
+                <p class="text-white/75 mb-6 leading-relaxed"></p>
+                <dl class="grid grid-cols-3 gap-3 mb-7">
+                    <div class="rounded-2xl bg-white/10 py-3"><dt class="text-xs text-white/60">Score</dt><dd class="font-display font-bold text-2xl tabular">${cc.score}</dd></div>
+                    <div class="rounded-2xl bg-white/10 py-3"><dt class="text-xs text-white/60">Sorted</dt><dd class="font-display font-bold text-2xl tabular">${cc.sorted}</dd></div>
+                    <div class="rounded-2xl bg-white/10 py-3"><dt class="text-xs text-white/60">Accuracy</dt><dd class="font-display font-bold text-2xl tabular">${accuracy}%</dd></div>
+                </dl>`;
+            $('cc-overlay-body').querySelector('h4').textContent = newBest && cc.score > 0 ? `${title} New best score!` : title;
+            $('cc-overlay-body').querySelector('p').textContent = lead;
+            $('cc-start').innerHTML = '<i class="fas fa-rotate-right" aria-hidden="true"></i>Play again';
+            $('cc-overlay').style.display = '';
+            showBestScore();
+            setCCStatus(`Game over. You scored ${cc.score} points.`);
+            $('cc-start').focus({ preventScroll: true });
+        }
+
+        /* ============ Keyboard shortcuts ============ */
+        document.addEventListener('keydown', e => {
+            const lb = document.getElementById('lightbox');
+            if (lb.classList.contains('open')) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowRight') stepLightbox(1);
+                if (e.key === 'ArrowLeft') stepLightbox(-1);
+                return;
+            }
+            if (cc.running && document.getElementById('page-actions').classList.contains('active')) {
+                const map = { '1': 'plastic', '2': 'paper', '3': 'glass', '4': 'organic' };
+                if (map[e.key]) { e.preventDefault(); dropInBin(map[e.key]); }
+                if (e.key === 'Escape' && cc.selected) selectLitter(cc.selected);
+            }
+        });
+    </script>
+</body>
+</html>
